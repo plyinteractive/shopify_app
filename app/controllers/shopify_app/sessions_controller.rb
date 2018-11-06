@@ -46,7 +46,7 @@ module ShopifyApp
       session['shopify.omniauth_params'] = { shop: sanitized_shop_name }
 
       if redirect_for_cookie_access?
-        fullpage_redirect_to enable_cookies_path(shop: sanitized_shop_name)
+        fullpage_redirect_to enable_cookies_path(shop: sanitized_shop_name, return_to: params[:return_to])
       elsif authenticate_in_context?
         authenticate_in_context
       else

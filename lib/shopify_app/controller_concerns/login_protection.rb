@@ -40,7 +40,7 @@ module ShopifyApp
         head :unauthorized
       else
         if request.get?
-          session[:return_to] = "#{request.path}?#{sanitized_params.to_query}"
+          session[:return_to] = params[:return_to] || "#{request.path}?#{sanitized_params.to_query}"
         end
         redirect_to login_url
       end
@@ -67,7 +67,7 @@ module ShopifyApp
     end
 
     def login_url_params(top_level:)
-      query_params = {}
+      query_params = { return_to: session[:return_to] }
       query_params[:shop] = sanitized_params[:shop] if params[:shop].present?
 
       has_referer_shop_name = referer_sanitized_shop_name.present?

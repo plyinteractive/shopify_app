@@ -1,7 +1,7 @@
 (function() {
   function setCookieAndRedirect() {
     document.cookie = "shopify.cookies_persist=true";
-    window.location.href = window.shopOrigin + "/admin/apps/" + window.apiKey;
+    window.location.href = window.shopOrigin + "/admin/apps/" + window.apiKey + "?return_to=" + window.returnTo;
   }
 
   function shouldDisplayPrompt() {
