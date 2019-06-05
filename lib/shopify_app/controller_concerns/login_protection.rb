@@ -28,7 +28,8 @@ module ShopifyApp
 
     def shop_session
       return unless session[:shopify]
-      @shop_session ||= ShopifyApp::SessionRepository.retrieve(session[:shopify])
+      return if online_access_required?
+      @shop_session ||= ShopifyApp::SessionRepository.retrieve(session[:shopify], session[:shopify_user].try(:[], :token))
     end
 
     def login_again_if_different_shop
@@ -52,6 +53,7 @@ module ShopifyApp
     end
 
     def close_session
+      params[:shop] ||= shop_session.try(:domain)
       clear_shop_session
       redirect_to login_url
     end
@@ -139,6 +141,10 @@ module ShopifyApp
 
     def return_address
       session.delete(:return_to) || ShopifyApp.configuration.root_url
+    end
+
+    def online_access_required?
+      ShopifyApp.configuration.online_access? && session[:shopify] && !session[:shopify_user]
     end
   end
 end

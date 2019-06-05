@@ -56,9 +56,9 @@ module ShopifyApp
         api_version: ShopifyApp.configuration.api_version
       )
 
-      session[:shopify] = ShopifyApp::SessionRepository.store(session_store)
+      session[:shopify] = ShopifyApp::SessionRepository.store(session_store, !associated_user)
       session[:shopify_domain] = shop_name
-      session[:shopify_user] = associated_user
+      session[:shopify_user] = associated_user && associated_user.merge({token: token})
     end
 
     def install_webhooks
